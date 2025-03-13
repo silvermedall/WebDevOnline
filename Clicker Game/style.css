@@ -134,6 +134,10 @@
 }
 
 @media (max-width: 768px) {
+  .emoji-fall {
+    display: none;
+  }
+
   .container-holder {
     flex-direction: column;
   }
