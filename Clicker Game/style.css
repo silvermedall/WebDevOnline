@@ -137,4 +137,13 @@
   .container-holder {
     flex-direction: column;
   }
+
+  .clicker-container {
+    margin-left: 0;
+    margin-bottom: 20px;
+  }
+
+  .upgrades-container {
+    margin-right: 0;
+  }
 }
