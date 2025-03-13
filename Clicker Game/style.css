@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.background {
+  background: linear-gradient(to bottom, #2c3e50, #34495e);
+  width: 100%;
+  min-height: 100vh;
+  padding: 10px;
+  z-index: -1;
+}
+
+.emoji-fall {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.emoji {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0;
+  animation: fall 10s linear infinite, fadeIn 0.5s forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.container-holder {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.container-holder h1 {
+  color: white;
+  text-align: center;
+  font-size: 56px;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clicker-container {
+  width: 400px;
+  margin-left: 10vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.clicker-container p {
+  margin: 15px;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.clicker-container button {
+  background-color: white;
+  border: none;
+  font-size: 48px;
+  cursor: pointer;
+  margin: 15px;
+}
+
+.upgrades-container {
+  width: 400px;
+  margin-right: 10vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.upgrades-container h2 {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.upgrades-container .upgrade {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.upgrades-container .upgrade button {
+  background-color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}

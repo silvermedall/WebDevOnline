@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emoji Clicker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="background">
+      <div class="emoji-fall"></div>
+      <div class="container-holder">
+        <div class="clicker-container">
+          <p id="count">0</p>
+          <button id="emoji" onclick="buttonPress()">😀</button>
+        </div>
+        <h1>Emoji Clicker</h1>
+        <div class="upgrades-container">
+          <h2>Upgrades</h2>
+          <div class="upgrade">
+            <p>🏋️ Strong Finger:</p>
+            <button title="Clicks give more points" onclick="upgrade1()">
+              <span id="upgrade1Cost">10</span>💸
+            </button>
+          </div>
+          <div class="upgrade">
+            <p>⏳ Hourglass Boost:</p>
+            <button title="Generates points over time" onclick="upgrade2()">
+              <span id="upgrade2Cost">30</span>💸
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
