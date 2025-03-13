@@ -132,3 +132,9 @@
   font-size: 24px;
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .container-holder {
+    flex-direction: column;
+  }
+}
