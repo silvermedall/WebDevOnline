@@ -139,11 +139,18 @@
   }
 
   .container-holder {
+    height: auto;
     flex-direction: column;
   }
 
+  .container-holder h1 {
+    position: static;
+    transform: none;
+    margin-bottom: 20px;
+  }
   .clicker-container {
     margin-left: 0;
+    margin-bottom: 20px;
   }
 
   .upgrades-container {
