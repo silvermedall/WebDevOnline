@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D. Dinis e o Mistério dos Eucaliptos</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap");
+    </style>
+  </head>
+
+  <body>
+    <div class="title-container">
+      <h1>D. Dinis, o Lavrador</h1>
+      <div class="portrait-frame">
+        <img src="img/dinis.png" alt="D. Dinis" class="portrait" />
+      </div>
+      <div class="button-container">
+        <p id="count">0</p>
+        <button onclick="addCount()">🌳</button>
+      </div>
+    </div>
+
+    <button class="upgrade-button">☰</button>
+    <div class="menu">
+      <ul>
+        <section class="upgrade-divider">
+          <li title="+ Linear Click Count" onclick="upgrade1()">
+            Academia Real dos Arboristas: <span id="upgradeCost1">50</span>
+          </li>
+          <li title="+ Percentage Click Count" onclick="upgrade2()">
+            Cadeira Gaming de D. Dinis: <span id="upgradeCost2">200</span>
+          </li>
+        </section>
+        <section class="upgrade-divider">
+          <li title="+ Linear Passive" onclick="upgrade3()">
+            Reinforço das Cruzadas: <span id="upgradeCost3">X</span>
+          </li>
+          <li title="+ Percentage Passive" onclick="upgrade4()">
+            Programa de Potenciação de Tratores:
+            <span id="upgradeCost4">X</span>
+          </li>
+        </section>
+        <section class="upgrade-divider">
+          <li title="+ Fire Delay" onclick="ugprade5()">
+            Benção de Santo António: <span id="upgradeCost5">X</span>
+          </li>
+          <li title="Reset Fire Delay" onclick="upgrade6()">
+            O Retorno de D. Sebastão: <span id="upgradeCost6">X</span>
+          </li>
+        </section>
+        <section class="upgrade-divider">
+          <li title="Random Eucalyptus Drops" onclick="upgrade7()">
+            Subvenção Florestal da UE: <span id="upgradeCost7">X</span>
+          </li>
+        </section>
+      </ul>
+    </div>
+
+    <div class="tree-container">
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+      <div class="tree"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,168 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #2c3930;
+  box-sizing: border-box;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: -340px;
+  width: 300px;
+  height: 100vh;
+  background-color: #333;
+  color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.menu ul {
+  margin: 50% 0;
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu li {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #444;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.menu li:hover {
+  background-color: #555;
+}
+
+.menu .upgrade-divider {
+  margin-bottom: 5vh;
+}
+
+.upgrade-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #2c6e2f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.upgrade-button:hover {
+  background-color: #154d13;
+}
+
+.menu.open {
+  left: 0;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  height: 100vh;
+  text-align: center;
+}
+
+.title-container h1 {
+  font-family: "cardo", serif;
+  font-size: 48px;
+  font-weight: bold;
+  color: #dcd7c9;
+  margin-bottom: 20px;
+}
+
+.portrait-frame {
+  width: fit-content;
+  padding: 7px;
+  border: 3px solid #6a4e23;
+  background: linear-gradient(45deg, #f7d9a1, #c98a2e);
+  border-radius: 5px;
+  display: inline-block;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 60px;
+}
+.button-container p {
+  font-family: "cardo", serif;
+  font-size: 72px;
+  font-weight: bold;
+  color: #dcd7c9;
+  margin: 5px;
+}
+.button-container button {
+  background-color: transparent;
+  color: #dcd7c9;
+  border: none;
+  cursor: pointer;
+  font-size: 72px;
+  transition: background-color 0.3s ease;
+}
+
+.tree-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.tree {
+  position: relative;
+  width: 20px;
+  height: 60px;
+  bottom: -20px;
+  background-color: #2c6e2f;
+  border-radius: 5px;
+}
+
+.tree::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: -15px;
+  width: 50px;
+  height: 50px;
+  background-color: #1b4d1b;
+  border-radius: 50%;
+}
+
+.tree::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+  background-color: #154d13;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .title-container h1 {
+    font-size: 36px;
+  }
+
+  .tree:nth-child(n + 10) {
+    display: none;
+  }
+
+  .upgrade-button {
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}

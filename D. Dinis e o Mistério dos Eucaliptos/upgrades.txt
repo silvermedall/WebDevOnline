@@ -1,0 +1,14 @@
+Click upgrades:
+Academia Real de Arboristas / Royal Arborist Academy = +click count linear
+Cadeira Gaming de D. Dinis / Gamer Chair for D. Dinis = + click count percentage
+
+Passive Upgrades:
+Reinforço das Cruzadas / Crusader Reinforcements = passive upgrade linear
+Programa de Potenciação de Tratores / Full Throttle Farming = passive upgrade percentage
+
+Fire delay Upgrades:
+Benção de Santo António / Blessing from St. Anthony = +fire countdown delay
+O Retorno de D. Sebastião / D. Sebastião's Return = reset fire countdown
+
+Random/Extra upgrades:
+Subvenção Florestal da UE / EU Forestry Subsidy = random eucalyptus drops at random times
