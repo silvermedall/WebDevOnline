@@ -88,6 +88,39 @@ body {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
 }
 
+.fire-warning {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: red;
+  font-size: 36px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fire-warning.visible {
+  opacity: 1;
+  animation: flash 0.5s infinite alternate;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
 .button-container {
   display: flex;
   flex-direction: column;
@@ -153,10 +186,23 @@ body {
 @media (max-width: 768px) {
   .title-container h1 {
     font-size: 36px;
+    margin-bottom: 5px;
+  }
+
+  .title-container {
+    margin-top: 10px;
   }
 
   .tree:nth-child(n + 10) {
     display: none;
+  }
+
+  .button-container {
+    margin-top: 5px;
+  }
+
+  .button-container p {
+    font-size: 48px;
   }
 
   .upgrade-button {
@@ -164,5 +210,14 @@ body {
     left: 10px;
     padding: 5px 10px;
     font-size: 12px;
+  }
+
+  .menu {
+    left: -290px;
+    width: 250px;
+  }
+
+  .menu ul {
+    margin-top: 50px;
   }
 }
