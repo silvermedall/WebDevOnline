@@ -18,7 +18,6 @@ function loadGameStateIfAny() {
     clickPercentageIncrease: 0,
     passiveCount: 0,
     passivePercentageIncrease: 0,
-    fireCountdownPaused: false,
     fireDelay: 180000,
     fireResetDelay: 1800000,
     fireStart: false,
@@ -27,7 +26,7 @@ function loadGameStateIfAny() {
     passiveLinearUpgradeLevel: 0,
     passivePercentageUpgradeLevel: 0,
     fireDelayUpgradeLevel: 0,
-    fireResetUpgradeLevel: 0,
+    fireResetUpgradeLevel: 1,
     randomUpgradeLevel: 0,
   };
   window.localStorage.setItem("gameState", JSON.stringify(gameState));
@@ -65,7 +64,7 @@ function addCount() {
 }
 
 function passiveCounting() {
-  setTimeout(passiveCounting, 5000);
+  setTimeout(passiveCounting, 3000);
   let bonusPassiveLinearUpgrade = gameState.passiveLinearUpgradeLevel;
   let bonusPassivePercentageUpgrade =
     1 + gameState.passivePercentageIncrease / 100;
@@ -80,46 +79,69 @@ function passiveCounting() {
 passiveCounting();
 
 function showFireWarning() {
+  if (!gameState.fireStart) {
+    return;
+  }
   const warning = document.getElementById("fire-warning");
   warning.classList.remove("hidden");
   warning.classList.add("visible");
+
+  document.body.classList.add("fire");
+  document.querySelectorAll(".tree").forEach((tree) => {
+    tree.classList.add("burning");
+  });
 }
 
 function hideFireWarning() {
   const warning = document.getElementById("fire-warning");
   warning.classList.remove("visible");
   warning.classList.add("hidden");
+
+  document.body.classList.remove("fire");
+  document.querySelectorAll(".tree").forEach((tree) => {
+    tree.classList.remove("burning");
+  });
 }
 
 function fireCountdown() {
-  if (!gameState.fireCountdownPaused) {
-    if (!gameState.fireStart) {
-      gameState.fireStart = true;
-      console.log("Skipped");
-    } else {
-      gameState.count -= Math.floor(gameState.count * 0.3);
-      console.log("Burned");
-      document.getElementById("count").innerHTML = gameState.count;
-      hideFireWarning();
-    }
-
-    setTimeout(() => {
-      showFireWarning();
-    }, gameState.fireDelay - 5000);
-
-    setTimeout(fireCountdown, gameState.fireDelay);
+  if (!gameState.fireStart) {
+    gameState.fireStart = true;
+    console.log("Skipped");
+  } else {
+    gameState.count -= Math.floor(gameState.count * 0.3);
+    console.log("Burned");
+    document.getElementById("count").innerHTML = gameState.count;
+    hideFireWarning();
   }
+
+  setTimeout(() => {
+    showFireWarning();
+  }, gameState.fireDelay - 5000);
+
+  setTimeout(fireCountdown, gameState.fireDelay);
 }
 
 fireCountdown();
 
+function summonSebastiao() {
+  const fogLeft = document.getElementById("fog-left");
+  const fogRight = document.getElementById("fog-right");
+
+  fogLeft.classList.add("fog-active-left");
+  fogRight.classList.add("fog-active-right");
+
+  setTimeout(() => {
+    fogLeft.classList.remove("fog-active-left");
+    fogRight.classList.remove("fog-active-right");
+  }, 5000);
+}
+
 function fireCountdownReset() {
   if (gameState.fireResetUpgradeLevel > 0) {
-    gameState.fireCountdownPaused = true;
     setTimeout(() => {
-      gameState.fireCountdownPaused = false;
-      fireCountdown();
+      gameState.fireStart = false;
       fireCountdownReset();
+      summonSebastiao();
       console.log("Resetted");
     }, gameState.fireResetDelay);
   }
@@ -288,7 +310,7 @@ function upgrade7Function() {
       document.getElementById("count").innerHTML = gameState.count;
       randomValue = Math.floor(Math.random() * 100) + 1;
       console.log("Random value: " + randomValue);
-    }, randomValue * 1000);
+    }, randomValue * 1000 - gameState.randomUpgradeLevel * 1000);
   }
 }
 
