@@ -19,7 +19,7 @@ function loadGameStateIfAny() {
     passiveCount: 0,
     passivePercentageIncrease: 0,
     fireDelay: 180000,
-    fireResetDelay: 1800000,
+    fireResetDelay: 600000,
     fireStart: false,
     linearUpgradeLevel: 0,
     percentageUpgradeLevel: 0,
