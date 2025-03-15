@@ -26,7 +26,7 @@ function loadGameStateIfAny() {
     passiveLinearUpgradeLevel: 0,
     passivePercentageUpgradeLevel: 0,
     fireDelayUpgradeLevel: 0,
-    fireResetUpgradeLevel: 1,
+    fireResetUpgradeLevel: 0,
     randomUpgradeLevel: 0,
   };
   window.localStorage.setItem("gameState", JSON.stringify(gameState));
