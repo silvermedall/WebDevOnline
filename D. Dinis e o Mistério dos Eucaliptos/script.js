@@ -37,6 +37,20 @@ const gameState = loadGameStateIfAny();
 updateUIcost();
 
 function updateUIcost() {
+  document.getElementById("upgradeLevel1").innerHTML =
+    gameState.linearUpgradeLevel;
+  document.getElementById("upgradeLevel2").innerHTML =
+    gameState.percentageUpgradeLevel;
+  document.getElementById("upgradeLevel3").innerHTML =
+    gameState.passiveLinearUpgradeLevel;
+  document.getElementById("upgradeLevel4").innerHTML =
+    gameState.passivePercentageUpgradeLevel;
+  document.getElementById("upgradeLevel5").innerHTML =
+    gameState.fireDelayUpgradeLevel;
+  document.getElementById("upgradeLevel6").innerHTML =
+    gameState.fireResetUpgradeLevel;
+  document.getElementById("upgradeLevel7").innerHTML =
+    gameState.randomUpgradeLevel;
   document.getElementById("upgradeCost1").innerHTML = getUpgradeCost(
     50,
     gameState.linearUpgradeLevel,
@@ -203,6 +217,8 @@ function upgrade1() {
       gameState.linearUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel1").innerHTML =
+      gameState.linearUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -226,6 +242,8 @@ function upgrade2() {
       gameState.percentageUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel2").innerHTML =
+      gameState.percentageUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -248,6 +266,8 @@ function upgrade3() {
       gameState.passiveLinearUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel3").innerHTML =
+      gameState.passiveLinearUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -271,6 +291,8 @@ function upgrade4() {
       gameState.passivePercentageUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel4").innerHTML =
+      gameState.passivePercentageUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -294,6 +316,8 @@ function upgrade5() {
       gameState.fireDelayUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel5").innerHTML =
+      gameState.fireDelayUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -317,6 +341,8 @@ function upgrade6() {
       gameState.fireResetUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel6").innerHTML =
+      gameState.fireResetUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
@@ -334,6 +360,8 @@ function upgrade7() {
       gameState.randomUpgradeLevel,
       1.2
     );
+    document.getElementById("upgradeLevel7").innerHTML =
+      gameState.randomUpgradeLevel;
   } else {
     alert("You don't have enough points!");
   }
