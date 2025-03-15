@@ -34,6 +34,45 @@ function loadGameStateIfAny() {
 }
 
 const gameState = loadGameStateIfAny();
+updateUIcost();
+
+function updateUIcost() {
+  document.getElementById("upgradeCost1").innerHTML = getUpgradeCost(
+    50,
+    gameState.linearUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost2").innerHTML = getUpgradeCost(
+    200,
+    gameState.percentageUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost3").innerHTML = getUpgradeCost(
+    100,
+    gameState.passiveLinearUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost4").innerHTML = getUpgradeCost(
+    500,
+    gameState.passivePercentageUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost5").innerHTML = getUpgradeCost(
+    1000,
+    gameState.fireDelayUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost6").innerHTML = getUpgradeCost(
+    2000,
+    gameState.fireResetUpgradeLevel,
+    1.2
+  );
+  document.getElementById("upgradeCost7").innerHTML = getUpgradeCost(
+    5000,
+    gameState.randomUpgradeLevel,
+    1.2
+  );
+}
 
 function storeGameState() {
   setTimeout(storeGameState, 2000);
