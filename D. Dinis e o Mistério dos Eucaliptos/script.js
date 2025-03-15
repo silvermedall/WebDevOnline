@@ -79,17 +79,16 @@ function passiveCounting() {
 passiveCounting();
 
 function showFireWarning() {
-  if (!gameState.fireStart) {
-    return;
-  }
-  const warning = document.getElementById("fire-warning");
-  warning.classList.remove("hidden");
-  warning.classList.add("visible");
+  if (gameState.fireStart) {
+    const warning = document.getElementById("fire-warning");
+    warning.classList.remove("hidden");
+    warning.classList.add("visible");
 
-  document.body.classList.add("fire");
-  document.querySelectorAll(".tree").forEach((tree) => {
-    tree.classList.add("burning");
-  });
+    document.body.classList.add("fire");
+    document.querySelectorAll(".tree").forEach((tree) => {
+      tree.classList.add("burning");
+    });
+  }
 }
 
 function hideFireWarning() {
