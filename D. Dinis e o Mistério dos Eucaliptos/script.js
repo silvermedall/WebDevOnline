@@ -1,195 +1,295 @@
 const upgradeButton = document.querySelector(".upgrade-button");
 const menu = document.querySelector(".menu");
 
-let count = 0;
-let clickCount = 1;
-let clickPercentageIncrease = 0;
-let passiveCount = 0;
-let passivePercentageIncrease = 0;
+function loadGameStateIfAny() {
+  try {
+    const storedGameState = window.localStorage.getItem("gameState");
+    if (storedGameState) {
+      let gameState = JSON.parse(storedGameState);
+      gameState.fireStart = false;
+      return gameState;
+    }
+  } catch (error) {
+    console.error("Could not load Game State from local storage", error);
+  }
+  const gameState = {
+    count: 0,
+    clickCount: 1,
+    clickPercentageIncrease: 0,
+    passiveCount: 0,
+    passivePercentageIncrease: 0,
+    fireCountdownPaused: false,
+    fireDelay: 180000,
+    fireResetDelay: 1800000,
+    fireStart: false,
+    linearUpgradeLevel: 0,
+    percentageUpgradeLevel: 0,
+    passiveLinearUpgradeLevel: 0,
+    passivePercentageUpgradeLevel: 0,
+    fireDelayUpgradeLevel: 0,
+    fireResetUpgradeLevel: 0,
+    randomUpgradeLevel: 0,
+  };
+  window.localStorage.setItem("gameState", JSON.stringify(gameState));
+  return gameState;
+}
 
-let fireCountdownPaused = false;
-let fireDelay = 180000;
-let fireResetDelay = 1800000;
+const gameState = loadGameStateIfAny();
 
-let linearUpgradeLevel = 0;
-let percentageUpgradeLevel = 0;
+function storeGameState() {
+  setTimeout(storeGameState, 2000);
+  window.localStorage.setItem("gameState", JSON.stringify(gameState));
+  console.log("Game State saved");
+}
 
-let passiveLinearUpgradeLevel = 0;
-let passivePercentageUpgradeLevel = 0;
-
-let fireDelayUpgradeLevel = 0;
-let fireResetUpgradeLevel = 0;
-
-let randomUpgradeLevel = 0;
-
+storeGameState();
 
 upgradeButton.addEventListener("click", () => {
-    menu.classList.toggle("open");
+  menu.classList.toggle("open");
 });
 
 document.addEventListener("click", (event) => {
-    if (!menu.contains(event.target) && !upgradeButton.contains(event.target)) {
-        menu.classList.remove("open");
-    }
+  if (!menu.contains(event.target) && !upgradeButton.contains(event.target)) {
+    menu.classList.remove("open");
+  }
 });
 
 function addCount() {
-    let bonusFromLinearUpgrade = linearUpgradeLevel;
-    let bonusFromPercentageUpgrade = 1 + (clickPercentageIncrease / 100);
-    let totalClicks = Math.floor((clickCount + bonusFromLinearUpgrade) * bonusFromPercentageUpgrade);
-    count += totalClicks;
-    document.getElementById("count").innerHTML = count;
+  let bonusFromLinearUpgrade = gameState.linearUpgradeLevel;
+  let bonusFromPercentageUpgrade = 1 + gameState.clickPercentageIncrease / 100;
+  let totalClicks = Math.floor(
+    (gameState.clickCount + bonusFromLinearUpgrade) * bonusFromPercentageUpgrade
+  );
+  gameState.count += totalClicks;
+  document.getElementById("count").innerHTML = gameState.count;
 }
 
 function passiveCounting() {
-    setTimeout(passiveCounting, 5000);
-    let bonusPassiveLinearUpgrade = passiveLinearUpgradeLevel;
-    let bonusPassivePercentageUpgrade = 1 + (passivePercentageIncrease / 100);
-    let totalPassiveCount = Math.floor((passiveCount + bonusPassiveLinearUpgrade) * bonusPassivePercentageUpgrade);
-    count += totalPassiveCount;
-    document.getElementById("count").innerHTML = count;
+  setTimeout(passiveCounting, 5000);
+  let bonusPassiveLinearUpgrade = gameState.passiveLinearUpgradeLevel;
+  let bonusPassivePercentageUpgrade =
+    1 + gameState.passivePercentageIncrease / 100;
+  let totalPassiveCount = Math.floor(
+    (gameState.passiveCount + bonusPassiveLinearUpgrade) *
+      bonusPassivePercentageUpgrade
+  );
+  gameState.count += totalPassiveCount;
+  document.getElementById("count").innerHTML = gameState.count;
 }
 
 passiveCounting();
 
 function showFireWarning() {
-    const warning = document.getElementById("fire-warning");
-    warning.classList.remove("hidden");
-    warning.classList.add("visible");
+  const warning = document.getElementById("fire-warning");
+  warning.classList.remove("hidden");
+  warning.classList.add("visible");
 }
 
 function hideFireWarning() {
-    const warning = document.getElementById("fire-warning");
-    warning.classList.remove("visible");
-    warning.classList.add("hidden");
+  const warning = document.getElementById("fire-warning");
+  warning.classList.remove("visible");
+  warning.classList.add("hidden");
 }
 
 function fireCountdown() {
-    if (!fireCountdownPaused) {
-        setTimeout(fireCountdown, fireDelay);
-        count -= Math.floor(count * 0.3);
-        console.log("Burned");
-        document.getElementById("count").innerHTML = count;
-        hideFireWarning();
-
-        setTimeout(() => {
-            showFireWarning();
-        }, fireDelay - 5000);
+  if (!gameState.fireCountdownPaused) {
+    if (!gameState.fireStart) {
+      gameState.fireStart = true;
+      console.log("Skipped");
+    } else {
+      gameState.count -= Math.floor(gameState.count * 0.3);
+      console.log("Burned");
+      document.getElementById("count").innerHTML = gameState.count;
+      hideFireWarning();
     }
+
+    setTimeout(() => {
+      showFireWarning();
+    }, gameState.fireDelay - 5000);
+
+    setTimeout(fireCountdown, gameState.fireDelay);
+  }
 }
 
 fireCountdown();
 
 function fireCountdownReset() {
-    if (fireResetUpgradeLevel > 0) {
-        fireCountdownPaused = true;
-        setTimeout(() => {
-            fireCountdownPaused = false;
-            fireCountdown();
-            fireCountdownReset();
-            console.log("Resetted");
-        }, fireResetDelay);
-    }
+  if (gameState.fireResetUpgradeLevel > 0) {
+    gameState.fireCountdownPaused = true;
+    setTimeout(() => {
+      gameState.fireCountdownPaused = false;
+      fireCountdown();
+      fireCountdownReset();
+      console.log("Resetted");
+    }, gameState.fireResetDelay);
+  }
 }
 
 fireCountdownReset();
 
 function getUpgradeCost(baseCost, level, multiplier) {
-    return Math.round(baseCost * Math.pow(multiplier, level));
+  return Math.round(baseCost * Math.pow(multiplier, level));
 }
 
 function upgrade1() {
-    if (count >= getUpgradeCost(50, linearUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(50, linearUpgradeLevel, 1.2);
-        linearUpgradeLevel += 1;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost1").innerHTML = getUpgradeCost(50, linearUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >= getUpgradeCost(50, gameState.linearUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(50, gameState.linearUpgradeLevel, 1.2);
+    gameState.linearUpgradeLevel += 1;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost1").innerHTML = getUpgradeCost(
+      50,
+      gameState.linearUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade2() {
-    if (count >= getUpgradeCost(200, percentageUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(200, percentageUpgradeLevel, 1.2);
-        percentageUpgradeLevel += 1;
-        clickPercentageIncrease += 20;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost2").innerHTML = getUpgradeCost(200, percentageUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >=
+    getUpgradeCost(200, gameState.percentageUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(
+      200,
+      gameState.percentageUpgradeLevel,
+      1.2
+    );
+    gameState.percentageUpgradeLevel += 1;
+    gameState.clickPercentageIncrease += 20;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost2").innerHTML = getUpgradeCost(
+      200,
+      gameState.percentageUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade3() {
-    if (count >= getUpgradeCost(100, passiveLinearUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(100, passiveLinearUpgradeLevel, 1.2);
-        passiveLinearUpgradeLevel += 1;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost3").innerHTML = getUpgradeCost(100, passiveLinearUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >=
+    getUpgradeCost(100, gameState.passiveLinearUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(
+      100,
+      gameState.passiveLinearUpgradeLevel,
+      1.2
+    );
+    gameState.passiveLinearUpgradeLevel += 1;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost3").innerHTML = getUpgradeCost(
+      100,
+      gameState.passiveLinearUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade4() {
-    if (count >= getUpgradeCost(500, passivePercentageUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(500, passivePercentageUpgradeLevel, 1.2);
-        passivePercentageUpgradeLevel += 1;
-        passivePercentageIncrease += 20;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost4").innerHTML = getUpgradeCost(500, passivePercentageUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >=
+    getUpgradeCost(500, gameState.passivePercentageUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(
+      500,
+      gameState.passivePercentageUpgradeLevel,
+      1.2
+    );
+    gameState.passivePercentageUpgradeLevel += 1;
+    gameState.passivePercentageIncrease += 20;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost4").innerHTML = getUpgradeCost(
+      500,
+      gameState.passivePercentageUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade5() {
-    if (count >= getUpgradeCost(1000, fireDelayUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(1000, fireDelayUpgradeLevel, 1.2);
-        fireDelayUpgradeLevel += 1;
-        fireDelay += 15000;
-        document.getElementById("count").innerHTML = count;		
-        document.getElementById("upgradeCost5").innerHTML = getUpgradeCost(1000, fireDelayUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >=
+    getUpgradeCost(1000, gameState.fireDelayUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(
+      1000,
+      gameState.fireDelayUpgradeLevel,
+      1.2
+    );
+    gameState.fireDelayUpgradeLevel += 1;
+    gameState.fireDelay += 15000;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost5").innerHTML = getUpgradeCost(
+      1000,
+      gameState.fireDelayUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade6() {
-    if (count >= getUpgradeCost(2000, fireResetUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(2000, fireResetUpgradeLevel, 1.2);
-        fireResetUpgradeLevel += 1;
-        fireResetDelay -= 10000;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost6").innerHTML = getUpgradeCost(2000, fireResetUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >=
+    getUpgradeCost(2000, gameState.fireResetUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(
+      2000,
+      gameState.fireResetUpgradeLevel,
+      1.2
+    );
+    gameState.fireResetUpgradeLevel += 1;
+    gameState.fireResetDelay -= 10000;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost6").innerHTML = getUpgradeCost(
+      2000,
+      gameState.fireResetUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade7() {
-    if (count >= getUpgradeCost(5000, randomUpgradeLevel, 1.2)) {
-        count -= getUpgradeCost(5000, randomUpgradeLevel, 1.2);
-        randomUpgradeLevel += 1;
-        document.getElementById("count").innerHTML = count;
-        document.getElementById("upgradeCost7").innerHTML = getUpgradeCost(5000, randomUpgradeLevel, 1.2);
-    } else {
-        alert("You don't have enough points!");
-    }
+  if (
+    gameState.count >= getUpgradeCost(5000, gameState.randomUpgradeLevel, 1.2)
+  ) {
+    gameState.count -= getUpgradeCost(5000, gameState.randomUpgradeLevel, 1.2);
+    gameState.randomUpgradeLevel += 1;
+    document.getElementById("count").innerHTML = gameState.count;
+    document.getElementById("upgradeCost7").innerHTML = getUpgradeCost(
+      5000,
+      gameState.randomUpgradeLevel,
+      1.2
+    );
+  } else {
+    alert("You don't have enough points!");
+  }
 }
 
 function upgrade7Function() {
-    if (randomUpgradeLevel > 0) {
-        let randomValue = Math.floor(Math.random() * 100) + 1;
-        console.log("Random value: " + randomValue);
-        setTimeout(() => {
-            count += randomValue;
-            document.getElementById("count").innerHTML = count;
-            randomValue = Math.floor(Math.random() * 100) + 1;
-            console.log("Random value: " + randomValue);
-        }, randomValue*1000)
-    }
+  if (gameState.randomUpgradeLevel > 0) {
+    let randomValue = Math.floor(Math.random() * 100) + 1;
+    console.log("Random value: " + randomValue);
+    setTimeout(() => {
+      gameState.count += randomValue;
+      document.getElementById("count").innerHTML = gameState.count;
+      randomValue = Math.floor(Math.random() * 100) + 1;
+      console.log("Random value: " + randomValue);
+    }, randomValue * 1000);
+  }
 }
 
 upgrade7Function();
