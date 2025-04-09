@@ -165,6 +165,7 @@ function updateEconomyUI() {
   const coinCounterElement = document.getElementById("coin-counter");
   priceElement.textContent = `Price: ${gachaPrice}c`;
   coinCounterElement.textContent = `Coins: ${coins}c`;
+  updateUpgradeUI();
 }
 
 window.updateGachaPrice = function () {
