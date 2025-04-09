@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weapon Clicker</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+    </style>
+  </head>
+  <body>
+    <div class="top-area">
+      <div class="left-container">
+        <p class="container-title">Upgrades</p>
+      </div>
+      <div class="center-container">
+        <p class="container-title">Weapon Clicker</p>
+        <img src="assets/bossN.png" class="boss" id="boss" />
+        <div class="healthbar-wrapper">
+          <div class="healthbar-fill" id="healthbar-fill"></div>
+          <img src="assets/healthbar.png" class="healthbar-frame" />
+        </div>
+        <div class="weapon-slots" id="weapon-slots"></div>
+        <p class="coin-counter" id="coin-counter">Coins: 10c</p>
+      </div>
+      <div class="right-container">
+        <p class="container-title">Treasure</p>
+        <p class="gacha-price" id="gacha-price">Price: 10c</p>
+        <img src="assets/gacha.png" class="gacha-slot" id="gacha-slot" />
+        <div class="prize-container">
+          <img id="prize-img" src="assets/border-empty.png" />
+          <div class="prize-info">
+            <p id="prize-name">name</p>
+            <p id="prize-rarity">rarity</p>
+          </div>
+        </div>
+        <div class="library-container" id="library-container"></div>
+      </div>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

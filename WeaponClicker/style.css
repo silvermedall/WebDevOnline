@@ -1,0 +1,166 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #141414;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+  display: flex;
+}
+
+.container-title {
+  position: absolute;
+  font-size: 32px;
+  top: 50px;
+  align-self: center;
+}
+
+img {
+  width: 64px;
+  height: 64px;
+}
+
+p {
+  font-size: 24px;
+}
+
+.top-area {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Left */
+.top-area .left-container {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  border: white solid 2px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+/* Center */
+.top-area .center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.top-area .center-container img {
+  width: 96px;
+  height: 96px;
+}
+
+.top-area .center-container .healthbar-wrapper {
+  position: relative;
+  width: 192px;
+  height: 64px;
+}
+
+.top-area .center-container .healthbar-fill {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  height: 16px;
+  background-color: red;
+  width: 100%;
+  transition: width 0.3s ease;
+}
+
+.top-area .center-container .healthbar-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.top-area .center-container .weapon-slots {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.top-area .center-container .weapon-slots .weapon-slot {
+  margin: 3px;
+}
+
+@keyframes attack {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.attack {
+  animation: attack 0.3s ease;
+}
+
+/* Right */
+.top-area .right-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  border: white solid 2px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.top-area .right-container img:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.top-area .right-container .prize-container {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 40%;
+}
+
+.top-area .right-container .prize-container img {
+  cursor: default;
+  transform: none;
+}
+
+.top-area .right-container .prize-container .prize-info p {
+  font-size: 16px;
+}
+
+.top-area .right-container .library-container {
+  width: 90%;
+  height: 325px;
+  border: white solid 2px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  margin-top: 20px;
+  overflow-y: scroll;
+  flex-wrap: wrap;
+}
+
+.top-area .right-container .library-container .weapon-card {
+  margin: 3px;
+}
