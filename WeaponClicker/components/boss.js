@@ -1,3 +1,5 @@
+import { bossModifiers } from "./modifiers.js";
+
 export class BossEntity {
   constructor(bossData, rarity, weakness, bossGacha) {
     this.bossGacha = bossGacha;
@@ -6,9 +8,9 @@ export class BossEntity {
 
   setBossData(bossData, rarity, weakness) {
     this.img = bossData.img;
-    this.maxHP = bossData.maxHP;
+    this.maxHP = Math.floor(bossData.maxHP * bossModifiers.hpMultiplier);
     this.currentHP = this.maxHP;
-    this.coinReward = bossData.coins;
+    this.coinReward = Math.floor(bossData.coins * bossModifiers.coinMultiplier);
     this.rarity = rarity;
     this.weakness = weakness;
   }

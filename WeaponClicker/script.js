@@ -8,14 +8,21 @@ import { BossGacha } from "./components/bossGacha.js";
 import { BossEntity } from "./components/boss.js";
 import { WeaponGacha } from "./components/weaponGacha.js";
 import { WeaponInstance } from "./components/weapon.js";
+import { upgrades } from "./components/upgrades.js";
+import {
+  slotNumber,
+  registerSlotUpdater,
+  weaponGachaModifiers,
+} from "./components/modifiers.js";
 
-let coins = 10;
-let gachaPrice = 10;
+let coins = 10000;
+let basePrice = 10;
+let gachaPrice = basePrice;
+
 let inventory = [];
-let slotNumber = 4;
 let activeSlots = [];
 
-setSlotNumber(slotNumber);
+renderSlots();
 
 /* Gacha Logic */
 const weaponGachaInstance = new WeaponGacha(itemRarityRates, itemPool);
@@ -30,6 +37,7 @@ document.getElementById("gacha-slot").addEventListener("click", () => {
   updateGachaUI(item, itemRarity);
 
   const weapon = new WeaponInstance(item);
+  weapon.rarity = itemRarity;
   inventory.push(weapon);
   updateLibraryUI();
 });
@@ -42,6 +50,15 @@ function updateGachaUI(item, itemRarity) {
 
 /* Library Logic */
 function updateLibraryUI() {
+  const rarityOrder = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
+
+  inventory.sort((a, b) => {
+    const rarityDifference =
+      rarityOrder.indexOf(b.rarity) - rarityOrder.indexOf(a.rarity);
+    if (rarityDifference !== 0) return rarityDifference;
+    return a.name.localeCompare(b.name);
+  });
+
   const containerElement = document.getElementById("library-container");
   containerElement.innerHTML = "";
   console.log(inventory);
@@ -56,21 +73,29 @@ function updateLibraryUI() {
 }
 
 /* Slot + Weapon Attacking Logic */
-function setSlotNumber(slotNumber) {
-  slotNumber = slotNumber;
+function renderSlots() {
   const containerElement = document.getElementById("weapon-slots");
+  const oldSlots = [...activeSlots];
+  activeSlots = new Array(slotNumber).fill(null);
   containerElement.innerHTML = "";
 
   for (let i = 0; i < slotNumber; i++) {
     activeSlots[i] = null;
     const divElement = document.createElement("div");
     divElement.className = "weapon-slot";
-    divElement.innerHTML = `<img src="assets/border-empty.png" />`;
     divElement.setAttribute("data-slot", i);
+    divElement.innerHTML = `<img src="assets/border-empty.png" />`;
     divElement.onclick = () => clearSlot(i);
+    const oldWeapon = oldSlots[i];
+    if (oldWeapon) {
+      activeSlots[i] = oldWeapon;
+      divElement.querySelector("img").src = oldWeapon.img;
+      oldWeapon.startAttacking(bossInstance, updateBossUI, i);
+    }
     containerElement.appendChild(divElement);
   }
 }
+registerSlotUpdater(renderSlots);
 
 function fillSlot(slotIndex, weapon) {
   const slotElement = document.querySelector(
@@ -134,9 +159,54 @@ function updateBossUI() {
   }
 }
 
+/* Economy Logic */
 function updateEconomyUI() {
   const priceElement = document.getElementById("gacha-price");
   const coinCounterElement = document.getElementById("coin-counter");
   priceElement.textContent = `Price: ${gachaPrice}c`;
   coinCounterElement.textContent = `Coins: ${coins}c`;
 }
+
+window.updateGachaPrice = function () {
+  gachaPrice = Math.floor(basePrice * weaponGachaModifiers.priceMultiplier);
+  updateEconomyUI();
+};
+updateGachaPrice();
+
+/* Upgrades Logic */
+function purchaseUpgrade(upg) {
+  if (upg.level >= upg.maxLevel) return;
+
+  const cost = upg.getCost(upg.level);
+  if (coins < cost) return;
+
+  coins -= cost;
+  upg.level++;
+  upg.effect(upg.level);
+  updateBossUI();
+  updateEconomyUI();
+  updateUpgradeUI();
+}
+
+function updateUpgradeUI() {
+  const containerElement = document.getElementById("upgrade-container");
+  containerElement.innerHTML = "";
+  upgrades.forEach((upg) => {
+    if (upg.level >= upg.maxLevel) return;
+    const nextCost = upg.getCost(upg.level);
+
+    const divElement = document.createElement("div");
+    divElement.className = "upgrade-card";
+    divElement.innerHTML = `
+      <p>${upg.name}</p>
+      <p>${upg.description}</p>
+      <p>Level: ${upg.level}/${upg.maxLevel}</p>
+      <p>Cost: ${nextCost}c</p>
+      <button ${coins < nextCost ? "disabled" : ""}>Upgrade</button>
+    `;
+
+    divElement.querySelector("button").onclick = () => purchaseUpgrade(upg);
+    containerElement.appendChild(divElement);
+  });
+}
+updateUpgradeUI();

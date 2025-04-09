@@ -1,3 +1,5 @@
+import { bossModifiers } from "./modifiers.js";
+
 export class BossGacha {
   constructor(rarityRates, bossPool) {
     this.rarityRates = rarityRates;
@@ -5,14 +7,29 @@ export class BossGacha {
   }
 
   getRandomRarity() {
+    const boost = bossModifiers.rarityMultiplier;
+    const boostedRates = this.rarityRates.map((entry) => ({ ...entry }));
+
+    if (boost > 0) {
+      boostedRates.forEach((entry) => {
+        const r = entry.bossRarity;
+        if (["Uncommon", "Rare", "Epic", "Legendary"].includes(r)) {
+          entry.rate += boost * 2;
+        }
+      });
+
+      const total = boostedRates.reduce((sum, e) => sum + e.rate, 0);
+      boostedRates.forEach((e) => (e.rate = (e.rate / total) * 100));
+    }
+    console.log("Boss Rarity Rates: ", boostedRates);
     const rand = Math.random() * 100;
     let cumulative = 0;
 
-    for (let bossRarity of this.rarityRates) {
-      cumulative += bossRarity.rate;
-      if (rand < cumulative) return bossRarity.bossRarity;
+    for (let entry of boostedRates) {
+      cumulative += entry.rate;
+      if (rand < cumulative) return entry.bossRarity;
     }
-    return this.rarityRates[this.rarityRates.length - 1].bossRarity;
+    return boostedRates[0].bossRarity;
   }
 
   getRandomWeakness() {

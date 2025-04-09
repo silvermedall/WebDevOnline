@@ -1,3 +1,5 @@
+import { weaponGachaModifiers } from "./modifiers.js";
+
 export class WeaponGacha {
   constructor(rarityRates, itemPool) {
     this.rarityRates = rarityRates;
@@ -5,14 +7,31 @@ export class WeaponGacha {
   }
 
   getRandomRarity() {
+    const boost = weaponGachaModifiers.rarityMultiplier;
+    const boostedRates = this.rarityRates.map((entry) => ({ ...entry }));
+
+    if (boost > 0) {
+      boostedRates.forEach((entry) => {
+        const r = entry.itemRarity;
+        if (["Uncommon", "Rare", "Epic", "Legendary"].includes(r)) {
+          entry.rate += boost * 2;
+        }
+      });
+
+      const total = boostedRates.reduce((sum, e) => sum + e.rate, 0);
+      boostedRates.forEach((e) => (e.rate = (e.rate / total) * 100));
+    }
+
+    console.log("Item Rarity Rates: ", boostedRates);
+
     const rand = Math.random() * 100;
     let cumulative = 0;
 
-    for (let itemRarity of this.rarityRates) {
-      cumulative += itemRarity.rate;
-      if (rand < cumulative) return itemRarity.itemRarity;
+    for (let entry of boostedRates) {
+      cumulative += entry.rate;
+      if (rand < cumulative) return entry.itemRarity;
     }
-    return rarityRates[this.rarityRates.length - 1].itemRarity;
+    return boostedRates[0].itemRarity;
   }
 
   roll() {

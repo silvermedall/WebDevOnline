@@ -1,10 +1,11 @@
 export class WeaponInstance {
-  constructor({ name, img, attack, attackSpeed, type }) {
+  constructor({ name, img, attack, attackSpeed, type, rarity }) {
     this.name = name;
     this.img = img;
     this.attack = attack;
     this.attackSpeed = attackSpeed;
     this.type = type;
+    this.rarity = rarity;
   }
 
   startAttacking(boss, onBossHit, slotIndex) {
