@@ -14,8 +14,9 @@ import {
   registerSlotUpdater,
   weaponGachaModifiers,
 } from "./components/modifiers.js";
+import { weaponUpgradeTrees } from "./components/weaponUpgradeTrees.js";
 
-let coins = 10;
+let coins = 100000;
 let basePrice = 10;
 let gachaPrice = basePrice;
 
@@ -61,7 +62,6 @@ function updateLibraryUI() {
 
   const containerElement = document.getElementById("library-container");
   containerElement.innerHTML = "";
-  console.log(inventory);
 
   inventory.forEach((weapon) => {
     const divElement = document.createElement("div");
@@ -75,6 +75,12 @@ function updateLibraryUI() {
 /* Slot + Weapon Attacking Logic */
 function renderSlots() {
   const containerElement = document.getElementById("weapon-slots");
+  activeSlots.forEach((weapon, i) => {
+    if (weapon && typeof weapon.stopAttacking === "function") {
+      weapon.stopAttacking();
+    }
+  });
+
   const oldSlots = [...activeSlots];
   activeSlots = new Array(slotNumber).fill(null);
   containerElement.innerHTML = "";
@@ -211,6 +217,128 @@ function updateUpgradeUI() {
   });
 }
 updateUpgradeUI();
+
+/* Weapon Tree Logic */
+function unlockWeaponUpgrade(type, upgradeId) {
+  const tree = weaponUpgradeTrees[type];
+  const upgrade = tree.upgrades.find((u) => u.id === upgradeId);
+  if (!upgrade || upgrade.unlocked) return;
+
+  const needed = { ...upgrade.cost };
+  const matching = inventory.filter((w) => w.name === type);
+
+  const counts = {};
+  matching.forEach((w) => {
+    counts[w.rarity] = (counts[w.rarity] || 0) + 1;
+  });
+
+  for (const rarity in needed) {
+    if (counts[rarity] < needed[rarity])
+      return console.log("Not enough weapons");
+  }
+
+  for (const rarity in needed) {
+    let toRemove = needed[rarity];
+    for (let i = 0; i < inventory.length && toRemove > 0; i++) {
+      const w = inventory[i];
+      if (w.name === type && w.rarity === rarity) {
+        inventory.splice(i, 1);
+        i--;
+        toRemove--;
+      }
+    }
+  }
+
+  upgrade.unlocked = true;
+  console.log(`${type} upgrade unlocked: ${upgrade.name}`);
+  updateLibraryUI();
+  applyWeaponUpgrade(type);
+}
+
+function applyWeaponUpgrade(type) {
+  const tree = weaponUpgradeTrees[type];
+  if (!tree) return;
+
+  const applyTo = (weapon) => {
+    tree.upgrades.forEach((upg) => {
+      if (upg.unlocked) upg.effect(weapon);
+    });
+  };
+
+  inventory.filter((w) => w.name === type).forEach(applyTo);
+
+  activeSlots.filter((w) => w && w.name === type).forEach(applyTo);
+}
+
+function formatUpgradeCost(costObj) {
+  return Object.entries(costObj)
+    .map(([rarity, amount]) => `${amount}x ${rarity}`)
+    .join(", ");
+}
+
+function hasUpgradeMaterials(type, upgrade) {
+  const needed = { ...upgrade.cost };
+  const matching = inventory.filter((w) => w.name === type);
+
+  const counts = {};
+  matching.forEach((w) => {
+    counts[w.rarity] = (counts[w.rarity] || 0) + 1;
+  });
+
+  return Object.entries(needed).every(
+    ([rarity, amount]) => counts[rarity] >= amount
+  );
+}
+
+function renderWeaponUpgradeTree(type) {
+  const container = document.getElementById("bottom-area");
+  container.innerHTML = "";
+
+  const tree = weaponUpgradeTrees[type];
+  if (!tree) {
+    container.innerHTML = `<p>Upgrade tree not found for ${type}</p>`;
+    return;
+  }
+
+  const title = document.createElement("p");
+  title.textContent = `${type} Upgrade Tree`;
+  container.appendChild(title);
+
+  tree.upgrades.forEach((upgrade) => {
+    const card = document.createElement("div");
+    card.className = "upgrade-node";
+
+    const canAfford = hasUpgradeMaterials(type, upgrade);
+
+    card.innerHTML = `
+      <p>${upgrade.name}</p>
+      <p>Cost: ${formatUpgradeCost(upgrade.cost)}</p>
+      <button ${upgrade.unlocked ? "disabled" : ""} ${
+      !canAfford ? "disabled" : ""
+    }>${upgrade.unlocked ? "Unlocked" : "Unlock"}</button>
+    `;
+
+    card.querySelector("button").onclick = () => {
+      unlockWeaponUpgrade(type, upgrade.id);
+      renderWeaponUpgradeTree(type);
+    };
+
+    container.appendChild(card);
+  });
+}
+
+document.getElementById("sword-upgrades").onclick = () => {
+  renderWeaponUpgradeTree("Sword");
+};
+document.getElementById("shield-upgrades").onclick = () => {
+  renderWeaponUpgradeTree("Shield");
+};
+document.getElementById("hammer-upgrades").onclick = () => {
+  renderWeaponUpgradeTree("Hammer");
+};
+document.getElementById("axe-upgrades").onclick = () => {
+  renderWeaponUpgradeTree("Axe");
+};
 
 /* Media Queries */
 const leftPanel = document.querySelector(".left-container");

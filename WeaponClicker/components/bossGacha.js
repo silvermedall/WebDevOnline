@@ -21,7 +21,7 @@ export class BossGacha {
       const total = boostedRates.reduce((sum, e) => sum + e.rate, 0);
       boostedRates.forEach((e) => (e.rate = (e.rate / total) * 100));
     }
-    console.log("Boss Rarity Rates: ", boostedRates);
+
     const rand = Math.random() * 100;
     let cumulative = 0;
 

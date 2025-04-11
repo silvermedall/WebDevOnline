@@ -1,3 +1,5 @@
+import { weaponUpgradeTrees } from "./weaponUpgradeTrees.js";
+
 export class WeaponInstance {
   constructor({ name, img, attack, attackSpeed, type, rarity }) {
     this.name = name;
@@ -6,6 +8,16 @@ export class WeaponInstance {
     this.attackSpeed = attackSpeed;
     this.type = type;
     this.rarity = rarity;
+
+    const tree = weaponUpgradeTrees[this.name];
+    if (tree) {
+      tree.upgrades.forEach((upg) => {
+        if (upg.unlocked) {
+          upg.effect(this);
+        }
+      });
+    }
+    console.log(`${this.name} stats: `, this.attack, this.attackSpeed);
   }
 
   startAttacking(boss, onBossHit, slotIndex) {

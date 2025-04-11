@@ -22,8 +22,6 @@ export class WeaponGacha {
       boostedRates.forEach((e) => (e.rate = (e.rate / total) * 100));
     }
 
-    console.log("Item Rarity Rates: ", boostedRates);
-
     const rand = Math.random() * 100;
     let cumulative = 0;
 

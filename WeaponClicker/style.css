@@ -7,6 +7,7 @@ body {
   -webkit-font-smoothing: none;
   image-rendering: pixelated;
   display: flex;
+  flex-direction: column;
 }
 
 .container-title {
@@ -210,6 +211,61 @@ p {
 .toggle-left,
 .toggle-right {
   display: none;
+}
+
+/* Upgrade Trees */
+.upgrade-tree-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.upgrade-tree-buttons img {
+  margin: 5px;
+}
+
+.upgrade-tree-buttons img:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.bottom-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.bottom-area .upgrade-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  border: white solid 2px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.bottom-area .upgrade-node p {
+  margin: 5px;
+  font-size: 16px;
+}
+
+.bottom-area .upgrade-node button {
+  background-color: #141414;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  border: white solid 2px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.bottom-area .upgrade-node button:hover {
+  cursor: pointer;
 }
 
 /* Media Queries */
