@@ -200,9 +200,9 @@ function updateUpgradeUI() {
     divElement.className = "upgrade-card";
     divElement.innerHTML = `
       <p>${upg.name}</p>
-      <p>${upg.description}</p>
-      <p>Level: ${upg.level}/${upg.maxLevel}</p>
-      <p>Cost: ${nextCost}c</p>
+      <p class="upgrade-description">${upg.description}</p>
+      <p>${upg.level}/${upg.maxLevel}</p>
+      <p>${nextCost}c</p>
       <button ${coins < nextCost ? "disabled" : ""}>Upgrade</button>
     `;
 
@@ -211,3 +211,21 @@ function updateUpgradeUI() {
   });
 }
 updateUpgradeUI();
+
+/* Media Queries */
+const leftPanel = document.querySelector(".left-container");
+const rightPanel = document.querySelector(".right-container");
+
+document.querySelector(".toggle-left").addEventListener("click", () => {
+  if (rightPanel.classList.contains("show")) {
+    rightPanel.classList.remove("show");
+  }
+  leftPanel.classList.toggle("show");
+});
+
+document.querySelector(".toggle-right").addEventListener("click", () => {
+  if (leftPanel.classList.contains("show")) {
+    leftPanel.classList.remove("show");
+  }
+  rightPanel.classList.toggle("show");
+});

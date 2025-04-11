@@ -46,17 +46,44 @@ p {
   margin: 10px;
 }
 
-.top-area .left-container .upgrade-card {
+.top-area .left-container .upgrade-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 5px;
+  padding: 5px;
+}
+
+.top-area .left-container .upgrade-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  width: 90%;
+  height: 50px;
+  border: white solid 2px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .top-area .left-container .upgrade-card p {
   margin: 0;
   font-size: 16px;
+  margin-right: 5px;
+}
+
+.top-area .left-container .upgrade-card .upgrade-description {
+  width: 50%;
+}
+
+.top-area .left-container .upgrade-card button {
+  background-color: #141414;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  border: white solid 2px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 /* Center */
@@ -178,4 +205,73 @@ p {
 
 .top-area .right-container .library-container .weapon-card {
   margin: 3px;
+}
+
+.toggle-left,
+.toggle-right {
+  display: none;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .top-area .center-container img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .top-area .center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .top-area .left-container,
+  .top-area .right-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: #141414;
+    z-index: 100;
+    width: 100%;
+    margin: 0;
+    overflow-y: auto;
+    border: 0;
+  }
+
+  .top-area .left-container.show,
+  .top-area .right-container.show {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .toggle-left,
+  .toggle-right {
+    display: block;
+    position: absolute;
+    top: 10px;
+    z-index: 101;
+    background: #141414;
+    color: white;
+    border: white 2px solid;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: "Pixelify Sans", sans-serif;
+  }
+
+  .toggle-left {
+    left: 10px;
+  }
+
+  .toggle-right {
+    right: 10px;
+  }
+
+  .top-area .left-container .upgrade-card {
+    height: auto;
+  }
 }
