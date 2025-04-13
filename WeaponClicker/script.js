@@ -16,7 +16,7 @@ import {
 } from "./components/modifiers.js";
 import { weaponUpgradeTrees } from "./components/weaponUpgradeTrees.js";
 
-let coins = 10;
+let coins = 100000;
 let basePrice = 10;
 let gachaPrice = basePrice;
 
@@ -304,6 +304,10 @@ function renderWeaponUpgradeTree(type) {
   title.textContent = `${type} Upgrade Tree`;
   container.appendChild(title);
 
+  const upgradeTree = document.createElement("div");
+  upgradeTree.className = "upgrade-tree";
+  container.appendChild(upgradeTree);
+
   tree.upgrades.forEach((upgrade) => {
     const card = document.createElement("div");
     card.className = "upgrade-node";
@@ -323,7 +327,7 @@ function renderWeaponUpgradeTree(type) {
       renderWeaponUpgradeTree(type);
     };
 
-    container.appendChild(card);
+    upgradeTree.appendChild(card);
   });
 }
 
