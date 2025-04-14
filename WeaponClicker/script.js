@@ -16,14 +16,16 @@ import {
 } from "./components/modifiers.js";
 import { weaponUpgradeTrees } from "./components/weaponUpgradeTrees.js";
 
-let coins = 100000;
+let coins = 1000000;
 let basePrice = 10;
 let gachaPrice = basePrice;
 
 let inventory = [];
 let activeSlots = [];
+let currentUpgradeTreeType = null;
 
 renderSlots();
+updateRarityDisplay();
 
 /* Gacha Logic */
 const weaponGachaInstance = new WeaponGacha(itemRarityRates, itemPool);
@@ -41,6 +43,9 @@ document.getElementById("gacha-slot").addEventListener("click", () => {
   weapon.rarity = itemRarity;
   inventory.push(weapon);
   updateLibraryUI();
+  if (currentUpgradeTreeType === item.name) {
+    renderWeaponUpgradeTree(currentUpgradeTreeType);
+  }
 });
 
 function updateGachaUI(item, itemRarity) {
@@ -50,24 +55,78 @@ function updateGachaUI(item, itemRarity) {
 }
 
 /* Library Logic */
+function updateRarityDisplay() {
+  const containerElement = document.getElementById("rarity-display");
+  const baseRates = [...itemRarityRates.map((r) => ({ ...r }))];
+  const boostLevel = weaponGachaModifiers.rarityMultiplier || 0;
+
+  if (boostLevel > 0) {
+    baseRates.forEach((entry) => {
+      const r = entry.itemRarity;
+      if (["Uncommon", "Rare", "Epic", "Legendary"].includes(r)) {
+        entry.rate += boostLevel * 2;
+      }
+    });
+  }
+
+  const total = baseRates.reduce((sum, r) => sum + r.rate, 0);
+  baseRates.forEach((r) => (r.rate = ((r.rate / total) * 100).toFixed(1)));
+
+  const LabelMap = {
+    Common: "N",
+    Uncommon: "U",
+    Rare: "R",
+    Epic: "E",
+    Legendary: "L",
+  };
+
+  const html = baseRates
+    .map(
+      (r) =>
+        `<span class="rarity-${LabelMap[r.itemRarity]}">${
+          LabelMap[r.itemRarity]
+        }: ${r.rate}%</span>`
+    )
+    .join("");
+  containerElement.innerHTML = html;
+}
+
 function updateLibraryUI() {
   const rarityOrder = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
 
-  inventory.sort((a, b) => {
-    const rarityDifference =
-      rarityOrder.indexOf(b.rarity) - rarityOrder.indexOf(a.rarity);
-    if (rarityDifference !== 0) return rarityDifference;
-    return a.name.localeCompare(b.name);
+  const grouped = {};
+  inventory.forEach((weapon) => {
+    const key = `${weapon.name}|${weapon.rarity}`;
+    if (!grouped[key]) {
+      grouped[key] = { weapon, count: 0 };
+    }
+    grouped[key].count++;
+  });
+
+  const groupedArray = Object.values(grouped);
+  groupedArray.sort((a, b) => {
+    const rarityDiff =
+      rarityOrder.indexOf(b.weapon.rarity) -
+      rarityOrder.indexOf(a.weapon.rarity);
+    if (rarityDiff !== 0) return rarityDiff;
+    return a.weapon.name.localeCompare(b.weapon.name);
   });
 
   const containerElement = document.getElementById("library-container");
   containerElement.innerHTML = "";
-
-  inventory.forEach((weapon) => {
+  groupedArray.forEach(({ weapon, count }) => {
     const divElement = document.createElement("div");
     divElement.className = "weapon-card";
-    divElement.innerHTML = `<img src="${weapon.img}" />`;
-    divElement.onclick = () => sendToSlot(weapon);
+    divElement.innerHTML = `
+      <img src="${weapon.img}" />
+      <span class="weapon-count">x${count}</span>
+    `;
+
+    divElement.onclick = () => {
+      sendToSlot(weapon);
+      updateLibraryUI();
+    };
+
     containerElement.appendChild(divElement);
   });
 }
@@ -123,6 +182,9 @@ function clearSlot(slotIndex) {
     slotElement.src = "assets/border-empty.png";
 
     updateLibraryUI();
+    if (currentUpgradeTreeType === weapon.name) {
+      renderWeaponUpgradeTree(currentUpgradeTreeType);
+    }
   }
 }
 
@@ -135,6 +197,9 @@ function sendToSlot(weapon) {
   fillSlot(emptySlotIndex, weapon);
   weapon.startAttacking(bossInstance, updateBossUI, emptySlotIndex);
   updateLibraryUI();
+  if (currentUpgradeTreeType === weapon.name) {
+    renderWeaponUpgradeTree(currentUpgradeTreeType);
+  }
 }
 
 /* Boss Logic */
@@ -214,6 +279,7 @@ function updateUpgradeUI() {
 
     divElement.querySelector("button").onclick = () => purchaseUpgrade(upg);
     containerElement.appendChild(divElement);
+    updateRarityDisplay();
   });
 }
 updateUpgradeUI();
@@ -291,6 +357,7 @@ function hasUpgradeMaterials(type, upgrade) {
 }
 
 function renderWeaponUpgradeTree(type) {
+  currentUpgradeTreeType = type;
   const container = document.getElementById("bottom-area");
   container.innerHTML = "";
 

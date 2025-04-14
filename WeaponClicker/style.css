@@ -61,7 +61,7 @@ p {
   justify-content: space-between;
   margin-top: 15px;
   width: 90%;
-  height: 50px;
+  height: auto;
   border: white solid 2px;
   border-radius: 5px;
   padding: 5px;
@@ -191,6 +191,32 @@ p {
   font-size: 16px;
 }
 
+.top-area .right-container .rarity-display {
+  margin-top: 8px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.top-area .right-container .rarity-display span {
+  margin: 0 6px;
+}
+
+.rarity-N {
+  color: #ffffff;
+}
+.rarity-U {
+  color: #1eff00;
+}
+.rarity-R {
+  color: #0070dd;
+}
+.rarity-E {
+  color: #a335ee;
+}
+.rarity-L {
+  color: #ff8000;
+}
+
 .top-area .right-container .library-container {
   width: 90%;
   height: 325px;
@@ -278,6 +304,11 @@ p {
 
 /* Media Queries */
 @media (max-width: 768px) {
+  .container-title {
+    position: relative;
+    top: 0;
+  }
+
   .top-area .center-container img {
     width: 64px;
     height: 64px;

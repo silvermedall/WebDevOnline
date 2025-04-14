@@ -5,13 +5,13 @@ export const bossModifiers = {
 };
 
 export const weaponGachaModifiers = {
-  rarityMultiplier: 1,
+  rarityMultiplier: 0,
   priceMultiplier: 1,
 };
 
-export let slotNumber = 2;
+export let slotNumber = 3;
 export function applySlotUpgrade(level) {
-  slotNumber = 2 + level;
+  slotNumber = 3 + level;
   updateSlotUI();
 }
 
