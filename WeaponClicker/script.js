@@ -16,7 +16,7 @@ import {
 } from "./components/modifiers.js";
 import { weaponUpgradeTrees } from "./components/weaponUpgradeTrees.js";
 
-let coins = 1000000;
+let coins = 10;
 let basePrice = 10;
 let gachaPrice = basePrice;
 
