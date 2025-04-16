@@ -1,5 +1,6 @@
 body {
   font-family: system-ui, sans-serif;
+  font-size: 18px;
   background: #f0f0f0;
   padding: 2rem;
 }
@@ -27,4 +28,12 @@ li a {
 li a:hover {
   background: #0077cc;
   color: white;
+}
+
+/* Media Queries */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 18px;
+  }
 }
