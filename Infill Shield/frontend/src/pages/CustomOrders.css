@@ -1,0 +1,90 @@
+.custom-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  padding: 50px;
+}
+
+.custom-orders h1 {
+  margin-bottom: 20px;
+}
+
+.custom-order-form {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f3ee;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-order-form label {
+  left: 0;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.custom-order-form input,
+.custom-order-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 0 0 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.custom-order-form textarea {
+  height: 100px;
+}
+
+.custom-order-form select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.side-by-side {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45%;
+}
+
+.form-group select,
+.form-group input {
+  width: 95%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Media Queries */
+
+@media (max-width: 768px) {
+  .custom-order-form {
+    width: 100%;
+  }
+
+  .side-by-side {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+}
